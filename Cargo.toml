@@ -2,3 +2,6 @@
 name = "ga-rust"
 version = "0.1.0"
 authors = ["Andrew Schwartzmeyer <andrew@schwartzmeyer.com>"]
+
+[dependencies]
+rand = "0.3"
