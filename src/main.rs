@@ -5,28 +5,38 @@ extern crate rand;
 use std::iter::FromIterator;
 use rand::distributions::{IndependentSample, Range};
 
-const N: usize = 50;
-const P: usize = 128;
-
 fn schwefel(solution: &Vec<f64>) -> f64 {
     418.9829_f64 * solution.len() as f64
         + solution.iter().fold(0_f64, |sum, x| sum + x * x.abs().sqrt().sin())
 }
 
+struct Individual {
+    solution: Vec<f64>,
+    fitness: f64,
+}
+
+impl Individual {
+    fn new() -> Individual {
+        let n = 50;
+        let mut rng = rand::thread_rng();
+        let range = Range::new(-512.03_f64, 511.97);
+
+        let mut i = Individual {
+            solution: Vec::from_iter((0..n).map(|_| range.ind_sample(&mut rng))),
+            fitness: 0_f64,
+        };
+        i.fitness = schwefel(&i.solution);
+        i
+    }
+}
+
 fn main() {
-    let mut rng = rand::thread_rng();
-    let range = Range::new(-512.03_f64, 511.97);
+    let pop_size = 128;
 
     // initialize population
-    let population = Vec::from_iter((0..P).map(|_| {
-        Vec::from_iter((0..N).map(|_| {
-            range.ind_sample(&mut rng)
-        }))
-    }));
+    let population = Vec::from_iter((0..pop_size).map(|_| Individual::new()));
 
-    println!("{:?}", population); // debug print of solutions
-
-    let solution = population.iter().min_by(|x| schwefel(x) as i64).unwrap();
-    println!("The best solution was {:?}", solution);
-    println!("Its fitness was {}", schwefel(solution));
+    let best = population.iter().min_by(|x| schwefel(&x.solution) as i64).unwrap();
+    println!("The best solution was {:?}", best.solution);
+    println!("Its fitness was {}", schwefel(&best.solution));
 }
