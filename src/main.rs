@@ -32,19 +32,26 @@ impl Eq for Individual {}
 impl Ord for Individual {
     /// This dangerously delegates to `partial_cmp`
     fn cmp(&self, other: &Self) -> Ordering {
-        self.partial_cmp(other).unwrap()
+        if let Some(result) = self.fitness.partial_cmp(&other.fitness) {
+            return result;
+        }
+        unimplemented!();
     }
 }
 
 impl PartialEq<Individual> for Individual {
-    /// This delegates to `eq` on `fitness: f64`
+    /// This doesn't use `fitness.eq()` because it needs to be
+    /// consistent with `Eq`
     fn eq(&self, other: &Individual) -> bool {
-        self.fitness.eq(&other.fitness)
+        if let Some(result) = self.fitness.partial_cmp(&other.fitness) {
+            return result == Ordering::Equal;
+        }
+        unimplemented!();
     }
 }
 
 impl PartialOrd for Individual {
-    /// This delegates to `partial_cmp` on `fitness: f64`
+    /// This delegates to `fitness.partial_cmp()`
     fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
         self.fitness.partial_cmp(&other.fitness)
     }
