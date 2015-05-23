@@ -2,6 +2,7 @@
 
 extern crate rand;
 
+use std::cmp::{Eq, PartialEq, Ordering, PartialOrd};
 use std::iter::FromIterator;
 use rand::distributions::{IndependentSample, Range};
 
@@ -25,6 +26,29 @@ impl Individual {
         let fitness = schwefel(&solution);
 
         Individual { solution: solution, fitness: fitness }
+    }
+}
+
+impl Eq for Individual {}
+
+impl Ord for Individual {
+    /// This dangerously delegates to `partial_cmp`
+    fn cmp(&self, other: &Self) -> Ordering {
+        self.partial_cmp(other).unwrap()
+    }
+}
+
+impl PartialEq<Individual> for Individual {
+    /// This delegates to `eq` on `fitness: f64`
+    fn eq(&self, other: &Individual) -> bool {
+        self.fitness.eq(&other.fitness)
+    }
+}
+
+impl PartialOrd for Individual {
+    /// This delegates to `partial_cmp` on `fitness: f64`
+    fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
+        self.fitness.partial_cmp(&other.fitness)
     }
 }
 
