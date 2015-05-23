@@ -22,12 +22,7 @@ fn main() {
         }))
     }));
 
+    println!("{:?}", population); // debug print of solutions
 
-    // debug print of solutions
-    for solution in &population[..] {
-        for x in &solution[..] {
-            println!("{} ", x);
-        }
-    }
     println!("The best solution's fitness was {}", schwefel(&population[0]));
 }
