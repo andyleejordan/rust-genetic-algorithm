@@ -1,5 +1,3 @@
-#![feature(core)]
-
 extern crate rand;
 
 use std::cmp::{Eq, PartialEq, Ordering, PartialOrd};
@@ -58,7 +56,7 @@ fn main() {
     // initialize population
     let population = Vec::from_iter((0..pop_size).map(|_| Individual::new()));
 
-    let best = population.iter().min_by(|x| schwefel(&x.solution) as i64).unwrap();
+    let best = population.iter().min().unwrap();
     println!("The best solution was {:?}", best.solution);
     println!("Its fitness was {}", best.fitness);
 }
