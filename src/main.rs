@@ -21,12 +21,10 @@ impl Individual {
         let mut rng = rand::thread_rng();
         let range = Range::new(-512.03_f64, 511.97);
 
-        let mut i = Individual {
-            solution: Vec::from_iter((0..n).map(|_| range.ind_sample(&mut rng))),
-            fitness: 0_f64,
-        };
-        i.fitness = schwefel(&i.solution);
-        i
+        let solution = Vec::from_iter((0..n).map(|_| range.ind_sample(&mut rng)));
+        let fitness = schwefel(&solution);
+
+        Individual { solution: solution, fitness: fitness }
     }
 }
 
@@ -38,5 +36,5 @@ fn main() {
 
     let best = population.iter().min_by(|x| schwefel(&x.solution) as i64).unwrap();
     println!("The best solution was {:?}", best.solution);
-    println!("Its fitness was {}", schwefel(&best.solution));
+    println!("Its fitness was {}", best.fitness);
 }
