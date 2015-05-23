@@ -1,3 +1,5 @@
+#![feature(core)]
+
 extern crate rand;
 
 use std::iter::FromIterator;
@@ -24,5 +26,7 @@ fn main() {
 
     println!("{:?}", population); // debug print of solutions
 
-    println!("The best solution's fitness was {}", schwefel(&population[0]));
+    let solution = population.iter().min_by(|x| schwefel(x) as i64).unwrap();
+    println!("The best solution was {:?}", solution);
+    println!("Its fitness was {}", schwefel(solution));
 }
