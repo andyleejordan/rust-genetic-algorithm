@@ -13,7 +13,7 @@ fn schwefel(solution: &Vec<f64>) -> f64 {
 
 fn main() {
     let mut rng = rand::thread_rng();
-    let range = Range::new(-512.03, 511.97);
+    let range = Range::new(-512.03_f64, 511.97);
 
     // initialize population
     let population = Vec::from_iter((0..P).map(|_| {
