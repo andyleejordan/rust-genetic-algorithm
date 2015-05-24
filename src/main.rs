@@ -21,8 +21,10 @@ fn main() {
             x.mutate(&range, &mut rng)
         }).collect();
 
-        println!("{}th fitness: {}", i, best.fitness);
         let best = population.iter().min().unwrap();
+        if i % 100 == 0 {
+            println!("{}th fitness: {}", i, best.fitness);
+        }
 
         if best.fitness < 1000_f64 {
             println!("Solution: {:?}", best.solution);
