@@ -19,6 +19,15 @@ impl Individual {
 
         Individual { solution: solution, fitness: fitness }
     }
+
+    pub fn mutate<R: Rng>(&self, range: &Range<f64>, rng: &mut R) -> Individual {
+        let solution = self.solution.iter().map(|&x| {
+            // mutate 1 in 40 genes to a new value
+            if rng.gen_weighted_bool(40) { range.ind_sample(rng) } else { x }
+        }).collect();
+        let fitness = schwefel(&solution);
+        Individual { solution: solution, fitness: fitness }
+    }
 }
 
 impl Eq for Individual {}

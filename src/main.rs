@@ -15,7 +15,16 @@ fn main() {
         Individual::new(&range, &mut rng)
     }).collect();
 
+    // generate mutated offspring
+    let offspring: Vec<_> = population.iter().map(|x| {
+        x.mutate(&range, &mut rng)
+    }).collect();
+
     let best = population.iter().min().unwrap();
     println!("The best solution was {:?}", best.solution);
+    println!("Its fitness was {}", best.fitness);
+
+    let best = offspring.iter().min().unwrap();
+    println!("The best new solution was {:?}", best.solution);
     println!("Its fitness was {}", best.fitness);
 }
