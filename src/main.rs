@@ -15,18 +15,19 @@ fn main() {
         Individual::new(&range, &mut rng)
     }).collect();
 
-    loop {
+    for i in 0..10000 {
         // generate mutated offspring
         let offspring: Vec<_> = population.iter().map(|x| {
             x.mutate(&range, &mut rng)
         }).collect();
 
         let best = offspring.iter().min().unwrap();
-        println!("Fitness: {}", best.fitness);
+        println!("{}th fitness: {}", i, best.fitness);
 
         if best.fitness < 1000_f64 {
             println!("Solution: {:?}", best.solution);
-            break;
+            return;
         }
     }
+    println!("Failed to converge.");
 }
