@@ -8,8 +8,8 @@ mod individual;
 
 fn select<'a, R: Rng>(population: &'a Vec<Individual>, rng: &mut R)
                       -> &'a Individual {
-    let population: Vec<_> = (0..4).map(|_| rng.choose(population)).collect();
-    if let Some(selected) = population.iter().min() {
+    let contestants = (0..4).map(|_| rng.choose(population));
+    if let Some(selected) = contestants.min() {
         return selected.unwrap();
     }
     unimplemented!();
