@@ -1,7 +1,7 @@
 extern crate rand;
 
-use rand::{Rng, thread_rng};
-use rand::distributions::Range;
+use rand::Rng;
+use rand::distributions;
 use individual::Individual;
 
 mod individual;
@@ -16,8 +16,8 @@ fn select<'a, R: Rng>(population: &'a Vec<Individual>, rng: &mut R)
 }
 
 fn main() {
-    let mut rng = thread_rng();
-    let range = Range::new(-512.03_f64, 511.97); // range for Schwefel problem
+    let mut rng = rand::thread_rng();
+    let range = distributions::Range::new(-512.03_f64, 511.97);
 
     // initialize population
     let mut population: Vec<_> = (0..128).map(|_| {
