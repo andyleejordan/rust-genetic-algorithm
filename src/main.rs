@@ -1,10 +1,19 @@
 extern crate rand;
 
-use rand::thread_rng;
+use rand::{Rng, thread_rng};
 use rand::distributions::Range;
 use individual::Individual;
 
 mod individual;
+
+fn select<'a, R: Rng>(population: &'a Vec<Individual>, rng: &mut R)
+                      -> &'a Individual {
+    let population: Vec<_> = (0..4).map(|_| rng.choose(population)).collect();
+    if let Some(selected) = population.iter().min() {
+        return selected.unwrap();
+    }
+    unimplemented!();
+}
 
 fn main() {
     let mut rng = thread_rng();
@@ -16,9 +25,9 @@ fn main() {
     }).collect();
 
     for i in 0..10000 {
-        // generate mutated offspring
-        population = population.iter().map(|x| {
-            x.mutate(&range, &mut rng)
+        // select and mutate individuals for next population
+        population = (0..128).map(|_| {
+            select(&population, &mut rng).mutate(&range, &mut rng)
         }).collect();
 
         let best = population.iter().min().unwrap();
@@ -27,7 +36,8 @@ fn main() {
         }
 
         if best.fitness < 1000_f64 {
-            println!("Solution: {:?}", best.solution);
+            println!("{}th solution converged at {}: {:?}",
+                     i, best.fitness, best.solution);
             return;
         }
     }
