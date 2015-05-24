@@ -1,7 +1,6 @@
 extern crate rand;
 
 use std::cmp::{Eq, PartialEq, Ordering, PartialOrd};
-use std::iter::FromIterator;
 use self::rand::distributions::{IndependentSample, Range};
 
 fn schwefel(solution: &Vec<f64>) -> f64 {
@@ -16,11 +15,10 @@ pub struct Individual {
 
 impl Individual {
     pub fn new() -> Individual {
-        let n = 50;
         let mut rng = rand::thread_rng();
         let range = Range::new(-512.03_f64, 511.97);
 
-        let solution = Vec::from_iter((0..n).map(|_| range.ind_sample(&mut rng)));
+        let solution = (0..50).map(|_| range.ind_sample(&mut rng)).collect();
         let fitness = schwefel(&solution);
 
         Individual { solution: solution, fitness: fitness }
