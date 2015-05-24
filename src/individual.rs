@@ -1,7 +1,6 @@
-extern crate rand;
-
 use std::cmp::{Eq, PartialEq, Ordering, PartialOrd};
-use self::rand::distributions::{IndependentSample, Range};
+use rand::Rng;
+use rand::distributions::{IndependentSample, Range};
 
 fn schwefel(solution: &Vec<f64>) -> f64 {
     418.9829_f64 * solution.len() as f64
@@ -14,11 +13,8 @@ pub struct Individual {
 }
 
 impl Individual {
-    pub fn new() -> Individual {
-        let mut rng = rand::thread_rng();
-        let range = Range::new(-512.03_f64, 511.97);
-
-        let solution = (0..50).map(|_| range.ind_sample(&mut rng)).collect();
+    pub fn new<R: Rng>(range: &Range<f64>, rng: &mut R) -> Individual {
+        let solution = (0..50).map(|_| range.ind_sample(rng)).collect();
         let fitness = schwefel(&solution);
 
         Individual { solution: solution, fitness: fitness }
