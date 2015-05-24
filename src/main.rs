@@ -15,16 +15,18 @@ fn main() {
         Individual::new(&range, &mut rng)
     }).collect();
 
-    // generate mutated offspring
-    let offspring: Vec<_> = population.iter().map(|x| {
-        x.mutate(&range, &mut rng)
-    }).collect();
+    loop {
+        // generate mutated offspring
+        let offspring: Vec<_> = population.iter().map(|x| {
+            x.mutate(&range, &mut rng)
+        }).collect();
 
-    let best = population.iter().min().unwrap();
-    println!("The best solution was {:?}", best.solution);
-    println!("Its fitness was {}", best.fitness);
+        let best = offspring.iter().min().unwrap();
+        println!("Fitness: {}", best.fitness);
 
-    let best = offspring.iter().min().unwrap();
-    println!("The best new solution was {:?}", best.solution);
-    println!("Its fitness was {}", best.fitness);
+        if best.fitness < 1000_f64 {
+            println!("Solution: {:?}", best.solution);
+            break;
+        }
+    }
 }
