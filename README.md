@@ -1,6 +1,8 @@
 Genetic Algorithm
 =================
 
+[![Build Status](https://travis-ci.org/andschwa/rust-genetic-algorithm.svg?branch=master)](https://travis-ci.org/andschwa/rust-genetic-algorithm)
+
 A genetic algorithm in Rust for Schwefel's [function][].
 
 Based on my prior implementation in [C++][]
