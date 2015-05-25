@@ -6,6 +6,7 @@ use individual::Individual;
 
 mod individual;
 
+/// Tournament selection from 4 random individuals
 fn select<R: Rng>(population: &Vec<Individual>, rng: &mut R)
                   -> Individual {
     if let Some(selected) = (0..4).map(|_| rng.choose(population)).min() {
@@ -15,19 +16,21 @@ fn select<R: Rng>(population: &Vec<Individual>, rng: &mut R)
     }
 }
 
+/// Setup and run algorithm to search for solution
 fn main() {
     let mut rng = rand::thread_rng();
     let range = distributions::Range::new(-500_f64, 500_f64);
 
-    // initialize population
+    // initialize population of 512 individuals
     let mut population: Vec<_> = (0..512).map(|_| {
         Individual::new(&range, &mut rng)
     }).collect();
 
+    // search through at most 10,000 generations
     for i in 0..10000 {
-        // select, mutate, and recombine individuals for next population
+        // select, mutate, and recombine individuals for next generation
         let mut offspring: Vec<Individual> = Vec::with_capacity(population.len());
-        for _ in (0..population.len()/2) {
+        for _ in 0..population.len()/2 {
             let (mut x, mut y) = (select(&population, &mut rng),
                                   select(&population, &mut rng));
             x.mutate(&range, &mut rng);
@@ -38,15 +41,17 @@ fn main() {
         }
         assert!(offspring.len() == population.len());
 
-        // replace random individuals with elite of prior generation
+        // replace 2 random individuals with elite of prior generation
         for _ in 0..2 {
             if let Some(x) = population.iter().min() {
                 offspring[rng.gen_range(0, population.len())] = x.clone();
             }
         }
 
+        // replace population with next generation
         population = offspring;
 
+        // examine best individual for convergence
         if let Some(x) = population.iter().min() {
             if i % 1000 == 0 {
                 println!("{}th fitness: {}", i, x.fitness);
