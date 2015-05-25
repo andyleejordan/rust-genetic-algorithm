@@ -13,7 +13,7 @@ pub struct Individual {
 }
 
 impl Individual {
-    pub fn new<R: Rng>(range: &Range<f64>, rng: &mut R) -> Individual {
+    pub fn new<R: Rng>(range: &Range<f64>, rng: &mut R) -> Self {
         let solution = (0..50).map(|_| range.ind_sample(rng)).collect();
         let fitness = schwefel(&solution);
 
@@ -27,6 +27,12 @@ impl Individual {
         }).collect();
         let fitness = schwefel(&solution);
         Individual { solution: solution, fitness: fitness }
+    }
+}
+
+impl Clone for Individual {
+    fn clone(&self) -> Self {
+        Individual { solution: self.solution.clone(), fitness: self.fitness }
     }
 }
 
