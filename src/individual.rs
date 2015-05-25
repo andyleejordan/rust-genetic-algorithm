@@ -10,7 +10,7 @@ use rand::distributions::{IndependentSample, Range};
 /// Evaluated on the hypercube with x_i in [-500, 500] and dim(x) = 50
 /// Global minimum: f(x*) = 0, at x* = (420.9687, ...)
 /// [problem]: http://www.sfu.ca/~ssurjano/schwef.html
-fn schwefel(solution: &Vec<f64>) -> f64 {
+fn schwefel(solution: &[f64]) -> f64 {
     418.9829_f64 * solution.len() as f64
         - solution.iter().fold(0_f64, |sum, x| {
             sum + x * x.abs().sqrt().sin()
@@ -26,7 +26,7 @@ pub struct Individual {
 impl Individual {
     /// Constructs a new Individual with 50 random values in the range
     pub fn new<R: Rng>(range: &Range<f64>, rng: &mut R) -> Self {
-        let solution = (0..50).map(|_| range.ind_sample(rng)).collect();
+        let solution: Vec<_> = (0..50).map(|_| range.ind_sample(rng)).collect();
         let fitness = schwefel(&solution);
         Individual { solution: solution, fitness: fitness }
     }
