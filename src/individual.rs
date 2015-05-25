@@ -32,15 +32,16 @@ impl Individual {
     }
 
     /// Mutates 0 or 1 random genes to a new value in the range
+    /// Fitness is NOT evaluated as it is ALWAYS done in `combine()`
     pub fn mutate<R: Rng>(&mut self, range: &Range<f64>, rng: &mut R) {
         for _ in 0..rng.gen_range(0, 2) {
             let i = rng.gen_range(0, self.solution.len());
             self.solution[i] = range.ind_sample(rng);
         }
-        self.fitness = schwefel(&self.solution);
     }
 
     /// Recombines two Individuals with a 1 in 2 chance via two-point crossover
+    /// Fitness is ALWAYS evaluated because it is NOT done in mutate()
     pub fn combine<R: Rng>(x: &mut Individual, y: &mut Individual, rng: &mut R) {
         if rng.gen_weighted_bool(2) {
             let len = x.solution.len();
@@ -48,9 +49,9 @@ impl Individual {
             for i in begin..(begin + n) % len {
                 mem::swap(&mut x.solution[i], &mut y.solution[i]);
             }
-            x.fitness = schwefel(&x.solution);
-            y.fitness = schwefel(&y.solution);
         }
+        x.fitness = schwefel(&x.solution);
+        y.fitness = schwefel(&y.solution);
     }
 }
 
