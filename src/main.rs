@@ -30,16 +30,17 @@ fn main() {
             select(&population, &mut rng).mutate(&range, &mut rng)
         }).collect();
 
-        let best = population.iter().min().unwrap();
-        if i % 100 == 0 {
-            println!("{}th fitness: {}", i, best.fitness);
-        }
+        if let Some(x) = population.iter().min() {
+            if i % 100 == 0 {
+                println!("{}th fitness: {}", i, x.fitness);
+            }
 
-        if best.fitness < 1000_f64 {
-            println!("{}th solution converged at {}: {:?}",
-                     i, best.fitness, best.solution);
-            return;
-        }
+            if x.fitness < 1000_f64 {
+                println!("{}th solution converged at {}: {:?}",
+                         i, x.fitness, x.solution);
+                return;
+            }
+        } else { unimplemented!() }
     }
     println!("Failed to converge.");
 }
