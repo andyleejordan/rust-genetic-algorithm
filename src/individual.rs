@@ -31,12 +31,11 @@ impl Individual {
         Individual { solution: solution, fitness: fitness }
     }
 
-    /// Mutates 1 in 40 genes to a new value in the range
+    /// Mutates 0 or 1 random genes to a new value in the range
     pub fn mutate<R: Rng>(&mut self, range: &Range<f64>, rng: &mut R) {
-        for x in &mut self.solution {
-            if rng.gen_weighted_bool(40) {
-                *x = range.ind_sample(rng)
-            }
+        for _ in 0..rng.gen_range(0, 2) {
+            let i = rng.gen_range(0, self.solution.len());
+            self.solution[i] = range.ind_sample(rng);
         }
         self.fitness = schwefel(&self.solution);
     }
