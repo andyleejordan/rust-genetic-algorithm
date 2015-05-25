@@ -52,7 +52,7 @@ fn main() {
                 println!("{}th fitness: {}", i, x.fitness);
             }
 
-            if x.fitness < 1000_f64 {
+            if x.fitness < 0.05_f64 {
                 println!("{}th solution converged at {}: {:?}",
                          i, x.fitness, x.solution);
                 return;
