@@ -10,3 +10,4 @@ description = "A genetic algorithm in Rust for Schwefel's function."
 
 [dependencies]
 rand = "0.3"
+time = "0.1"

@@ -2,9 +2,11 @@
 /// Copyright (C) 2015  Andrew Schwartzmeyer
 
 extern crate rand;
+extern crate time;
 
 use rand::Rng;
 use rand::distributions;
+use time::precise_time_s;
 use individual::Individual;
 
 mod individual;
@@ -29,6 +31,7 @@ fn main() {
         Individual::new(&range, &mut rng)
     }).collect();
 
+    let start_time = precise_time_s();
     // search through at most 10,000 generations
     for i in 0..10000 {
         // select, mutate, and recombine individuals for next generation
@@ -56,13 +59,10 @@ fn main() {
 
         // examine best individual for convergence
         if let Some(x) = population.iter().min() {
-            if i % 1000 == 0 {
-                println!("{}th fitness: {}", i, x.fitness);
-            }
-
             if x.fitness < 0.05_f64 {
-                println!("{}th solution converged at {}: {:?}",
-                         i, x.fitness, x.solution);
+                let duration = precise_time_s() - start_time;
+                println!("{}th solution converged at {} in {} seconds: {:?}",
+                         i, x.fitness, duration, x.solution);
                 return;
             }
         } else { unimplemented!() }
