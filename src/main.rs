@@ -17,7 +17,7 @@ fn select<R: Rng>(population: &Vec<Individual>, rng: &mut R)
 
 fn main() {
     let mut rng = rand::thread_rng();
-    let range = distributions::Range::new(-512.03_f64, 511.97);
+    let range = distributions::Range::new(-500_f64, 500_f64);
 
     // initialize population
     let mut population: Vec<_> = (0..512).map(|_| {
