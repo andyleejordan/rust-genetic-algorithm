@@ -20,7 +20,7 @@ fn main() {
     let range = distributions::Range::new(-512.03_f64, 511.97);
 
     // initialize population
-    let mut population: Vec<_> = (0..128).map(|_| {
+    let mut population: Vec<_> = (0..512).map(|_| {
         Individual::new(&range, &mut rng)
     }).collect();
 
