@@ -1,3 +1,6 @@
+/// A genetic algorithm in Rust
+/// Copyright (C) 2015  Andrew Schwartzmeyer
+
 use std::cmp::{Eq, PartialEq, Ordering, PartialOrd};
 use std::mem;
 use rand::Rng;

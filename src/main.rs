@@ -1,3 +1,6 @@
+/// A genetic algorithm in Rust
+/// Copyright (C) 2015  Andrew Schwartzmeyer
+
 extern crate rand;
 
 use rand::Rng;
