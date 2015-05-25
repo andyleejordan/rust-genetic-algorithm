@@ -7,6 +7,7 @@ extern crate time;
 use rand::Rng;
 use rand::distributions;
 use time::precise_time_s;
+use std::thread;
 use individual::Individual;
 
 mod individual;
@@ -59,6 +60,12 @@ fn main() {
 
         // examine best individual for convergence
         if let Some(x) = population.iter().min() {
+            if i % 10 == 0 {
+                let fitness = x.fitness;
+                thread::spawn(move || {
+                    println!("{}th fitness {}", i, fitness)
+                });
+            }
             if x.fitness < 0.05_f64 {
                 let duration = precise_time_s() - start_time;
                 println!("{}th solution converged at {} in {} seconds: {:?}",
