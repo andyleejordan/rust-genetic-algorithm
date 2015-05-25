@@ -25,10 +25,19 @@ fn main() {
     }).collect();
 
     for i in 0..10000 {
-        // select and mutate individuals for next population
-        population = (0..128).map(|_| {
-            select(&population, &mut rng).mutate(&range, &mut rng)
-        }).collect();
+        // select, mutate, and recombine individuals for next population
+        let mut offspring: Vec<Individual> = Vec::with_capacity(population.len());
+        for _ in (0..population.len()/2) {
+            let (mut x, mut y) = (select(&population, &mut rng),
+                                  select(&population, &mut rng));
+            x.mutate(&range, &mut rng);
+            y.mutate(&range, &mut rng);
+            Individual::combine(&mut x, &mut y, &mut rng);
+            offspring.push(x);
+            offspring.push(y);
+        }
+        assert!(offspring.len() == population.len());
+        population = offspring;
 
         if let Some(x) = population.iter().min() {
             if i % 100 == 0 {
