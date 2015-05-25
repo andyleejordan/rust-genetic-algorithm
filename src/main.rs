@@ -37,6 +37,14 @@ fn main() {
             offspring.push(y);
         }
         assert!(offspring.len() == population.len());
+
+        // replace random individuals with elite of prior generation
+        for _ in 0..2 {
+            if let Some(x) = population.iter().min() {
+                offspring[rng.gen_range(0, population.len())] = x.clone();
+            }
+        }
+
         population = offspring;
 
         if let Some(x) = population.iter().min() {
