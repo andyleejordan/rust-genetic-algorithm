@@ -48,7 +48,7 @@ fn main() {
         population = offspring;
 
         if let Some(x) = population.iter().min() {
-            if i % 100 == 0 {
+            if i % 1000 == 0 {
                 println!("{}th fitness: {}", i, x.fitness);
             }
 
