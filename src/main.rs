@@ -6,13 +6,13 @@ use individual::Individual;
 
 mod individual;
 
-fn select<'a, R: Rng>(population: &'a Vec<Individual>, rng: &mut R)
-                      -> &'a Individual {
-    let contestants = (0..4).map(|_| rng.choose(population));
-    if let Some(selected) = contestants.min() {
-        return selected.unwrap();
+fn select<R: Rng>(population: &Vec<Individual>, rng: &mut R)
+                  -> Individual {
+    if let Some(selected) = (0..4).map(|_| rng.choose(population)).min() {
+        selected.unwrap().clone()
+    } else {
+        unimplemented!();
     }
-    unimplemented!();
 }
 
 fn main() {
