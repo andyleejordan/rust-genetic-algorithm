@@ -1,6 +1,6 @@
 [package]
-name = "ga-rust"
-version = "0.1.0"
+name = "rust-genetic-algorithm"
+version = "1.0.0"
 authors = ["Andrew Schwartzmeyer <andrew@schwartzmeyer.com>"]
 
 [dependencies]
