@@ -24,9 +24,9 @@ pub struct Individual {
 }
 
 impl Individual {
-    /// Constructs a new Individual with 50 random values in the range
-    pub fn new<R: Rng>(range: &Range<f64>, rng: &mut R) -> Self {
-        let solution: Vec<_> = (0..50).map(|_| range.ind_sample(rng)).collect();
+    /// Constructs a new Individual with n random values in the range
+    pub fn new<R: Rng>(n: usize, range: &Range<f64>, rng: &mut R) -> Self {
+        let solution: Vec<_> = (0..n).map(|_| range.ind_sample(rng)).collect();
         let fitness = schwefel(&solution);
         Individual { solution: solution, fitness: fitness }
     }

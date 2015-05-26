@@ -1,9 +1,12 @@
 /// A genetic algorithm in Rust
 /// Copyright (C) 2015  Andrew Schwartzmeyer
 
+#[macro_use]
+extern crate clap;
 extern crate rand;
 extern crate time;
 
+use clap::App;
 use rand::Rng;
 use rand::distributions;
 use time::precise_time_s;
@@ -23,17 +26,32 @@ fn select<R: Rng>(population: &[Individual], rng: &mut R) -> Individual {
 
 /// Setup and run algorithm to search for solution
 fn main() {
+    let matches = App::new("rust-genetic-algorithm")
+        .version(&crate_version!()[..])
+        .author("Andrew Schwartzmeyer <andrew@schwartzmeyer.com")
+        .about("A genetic algorithm in Rust for Schwefel's function.")
+        .args_from_usage(
+            "[-d --dimension <30>] 'Sets the dimension of the hypercube'
+             [-p --population <256>] 'Sets the size of the population'
+             [-i --iterations <5000>] 'Sets maximum number of generations'
+             --verbose 'Print fitness every 10th generation'")
+        .get_matches();
+    let dimension = value_t!(matches.value_of("d"), usize).unwrap_or(30);
+    let population_size = value_t!(matches.value_of("p"), usize).unwrap_or(256);
+    let iterations = value_t!(matches.value_of("i"), usize).unwrap_or(5000);
+    let verbose = matches.is_present("verbose");
+
     let mut rng = rand::thread_rng();
     let range = distributions::Range::new(-500_f64, 500_f64);
 
-    // initialize population of 512 individuals
-    let mut population: Vec<_> = (0..512).map(|_| {
-        Individual::new(&range, &mut rng)
+    // initialize population individuals
+    let mut population: Vec<_> = (0..population_size).map(|_| {
+        Individual::new(dimension, &range, &mut rng)
     }).collect();
 
     let start_time = precise_time_s();
-    // search through at most 10,000 generations
-    for i in 0..10000 {
+    // search with generations
+    for i in 0..iterations {
         // select, mutate, and recombine individuals for next generation
         let mut offspring: Vec<Individual> = Vec::with_capacity(population.len());
         for _ in 0..population.len()/2 {
@@ -59,7 +77,7 @@ fn main() {
 
         // examine best individual for convergence
         if let Some(x) = population.iter().min() {
-            if i % 10 == 0 {
+            if verbose && i % 10 == 0 {
                 let fitness = x.fitness;
                 thread::spawn(move || {
                     println!("{}th fitness {}", i, fitness)
