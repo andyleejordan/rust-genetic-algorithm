@@ -43,14 +43,14 @@ fn main() {
              [-d --dimension <30>] 'Sets the dimension of the hypercube'
              [-p --population <256>] 'Sets the size of the population'
              [-i --iterations <5000>] 'Sets maximum number of generations'
-             --verbose 'Print fitness every 10th generation'")
+             [verbose]... -v 'Print fitness (1) and solution (2) every 10th generation'")
         .get_matches();
     let problem = value_t!(matches.value_of("problem"), Problem)
         .unwrap_or(Problem::Schwefel);
     let dimension = value_t!(matches.value_of("d"), usize).unwrap_or(30);
     let population_size = value_t!(matches.value_of("p"), usize).unwrap_or(256);
     let iterations = value_t!(matches.value_of("i"), usize).unwrap_or(5000);
-    let verbose = matches.is_present("verbose");
+    let verbosity = matches.occurrences_of("verbose");
 
     let mut rng = rand::thread_rng();
 
@@ -87,19 +87,23 @@ fn main() {
 
         // examine best individual for convergence
         if let Some(x) = population.iter().min() {
-            if verbose && i % 10 == 0 {
+            if verbosity > 0 && i % 10 == 0 {
                 let fitness = x.fitness;
+                let solution = x.solution.clone();
                 thread::spawn(move || {
-                    println!("{}th fitness {}", i, fitness)
+                    if verbosity >= 1 {
+                        println!("{}th fitness {}", i, fitness);
+                    }
+                    if verbosity >= 2 {
+                        println!{"{:?}", solution};
+                    }
                 });
             }
             if x.fitness < 0.05_f64 {
                 let duration = precise_time_s() - start_time;
                 println!("{}th solution converged at {} in {} seconds",
                          i, x.fitness, duration);
-                if verbose {
-                    println!{"{:?}", x.solution};
-                }
+                println!{"{:?}", x.solution};
                 return;
             }
         } else { unimplemented!() }
