@@ -2,7 +2,6 @@
 /// Copyright (C) 2015  Andrew Schwartzmeyer
 
 use Problem;
-use problem::{fitness, domain};
 use std::cmp::{Eq, PartialEq, Ordering, PartialOrd};
 use std::mem;
 use rand::Rng;
@@ -19,11 +18,11 @@ pub struct Individual {
 impl Individual {
     /// Constructs a new Individual to solve Problem with n random values
     pub fn new<R: Rng>(problem: Problem, dimension: usize, rng: &mut R) -> Self {
-        let solution: Vec<_> = (0..dimension).map(|_| {
-            domain(problem).ind_sample(rng)
+        let x: Vec<_> = (0..dimension).map(|_| {
+            problem.domain().ind_sample(rng)
         }).collect();
-        let fitness = fitness(problem, &solution);
-        Individual { solution: solution, fitness: fitness, problem: problem }
+        let fitness = problem.fitness(&x);
+        Individual { solution: x, fitness: fitness, problem: problem }
     }
 
     /// Mutates 0 or 1 random genes to a new value in the range
@@ -31,7 +30,7 @@ impl Individual {
     pub fn mutate<R: Rng>(&mut self, rng: &mut R) {
         for _ in 0..rng.gen_range(0, 2) {
             let i = rng.gen_range(0, self.solution.len());
-            self.solution[i] = domain(self.problem).ind_sample(rng);
+            self.solution[i] = self.problem.domain().ind_sample(rng);
         }
     }
 
@@ -46,8 +45,8 @@ impl Individual {
                 mem::swap(&mut x.solution[i % len], &mut y.solution[i % len]);
             }
         }
-        x.fitness = fitness(x.problem, &x.solution);
-        y.fitness = fitness(y.problem, &y.solution);
+        x.fitness = x.problem.fitness(&x.solution);
+        y.fitness = y.problem.fitness(&y.solution);
     }
 }
 
