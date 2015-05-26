@@ -9,6 +9,7 @@ use rand::Rng;
 use rand::distributions::IndependentSample;
 
 /// An Orderable, Cloneable solution with a cached fitness
+#[derive(Clone)]
 pub struct Individual {
     pub solution: Vec<f64>,
     pub fitness: f64,
@@ -46,12 +47,6 @@ impl Individual {
         }
         x.fitness = fitness(x.problem, &x.solution);
         y.fitness = fitness(y.problem, &y.solution);
-    }
-}
-
-impl Clone for Individual {
-    fn clone(&self) -> Self {
-        Individual { solution: self.solution.clone(), .. *self }
     }
 }
 
