@@ -15,6 +15,13 @@ use individual::Individual;
 
 mod individual;
 
+arg_enum!{
+    #[derive(Copy, Clone)]
+    pub enum Problem {
+        Schwefel
+    }
+}
+
 /// Tournament selection from 4 random individuals
 fn select<R: Rng>(population: &[Individual], rng: &mut R) -> Individual {
     if let Some(selected) = (0..4).map(|_| rng.choose(population)).min() {
@@ -31,11 +38,14 @@ fn main() {
         .author("Andrew Schwartzmeyer <andrew@schwartzmeyer.com")
         .about("A genetic algorithm in Rust for Schwefel's function.")
         .args_from_usage(
-            "[-d --dimension <30>] 'Sets the dimension of the hypercube'
+            "[<problem>] 'The problem to solve'
+             [-d --dimension <30>] 'Sets the dimension of the hypercube'
              [-p --population <256>] 'Sets the size of the population'
              [-i --iterations <5000>] 'Sets maximum number of generations'
              --verbose 'Print fitness every 10th generation'")
         .get_matches();
+    let problem = value_t!(matches.value_of("problem"), Problem)
+        .unwrap_or(Problem::Schwefel);
     let dimension = value_t!(matches.value_of("d"), usize).unwrap_or(30);
     let population_size = value_t!(matches.value_of("p"), usize).unwrap_or(256);
     let iterations = value_t!(matches.value_of("i"), usize).unwrap_or(5000);
