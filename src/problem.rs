@@ -3,6 +3,7 @@
 
 use Problem;
 use rand::distributions::Range;
+use std::f64::consts;
 
 impl Problem {
     /// Fitness function for the evolutionary computation benchmark
@@ -13,6 +14,16 @@ impl Problem {
     /// * Schwefel: x* = (420.9687, ...), f(x*) = 0
     pub fn fitness(&self, x: &[f64]) -> f64 {
         match *self {
+            Problem::Ackley => {
+                let p = x.len() as f64;
+                20_f64 + consts::E - 20_f64 *
+                    (-0.2_f64 * (p.recip() * (x.iter().fold(0_f64, |sum, i| {
+                        sum + i.powi(2)
+                    })).sqrt())).exp() -
+                    (p.recip() * x.iter().fold(0_f64, |sum, i| {
+                        sum + (2_f64 * consts::PI * i).cos()
+                    })).exp()
+            }
             Problem::Schwefel => {
                 418.9829_f64 * x.len() as f64 + x.iter().fold(0_f64, |sum, i| {
                     sum + i * i.abs().sqrt().sin()
@@ -24,7 +35,8 @@ impl Problem {
     /// Domain for the given problem.
     pub fn domain(&self) -> Range<f64> {
         match *self {
-            Problem::Schwefel => Range::new(-512.03_f64, 511.97_f64)
+            Problem::Ackley => Range::new(-30_f64, 30_f64),
+            Problem::Schwefel => Range::new(-512.03_f64, 511.97_f64),
         }
     }
 }

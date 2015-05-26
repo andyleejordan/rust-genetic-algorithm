@@ -18,6 +18,7 @@ mod problem;
 arg_enum!{
     #[derive(Debug, PartialEq, Eq, Copy, Clone)]
     pub enum Problem {
+        Ackley,
         Schwefel
     }
 }
