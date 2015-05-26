@@ -8,12 +8,19 @@ use rand::{Rng, thread_rng};
 use std::thread;
 use time::precise_time_s;
 
+pub struct Results {
+    pub problem: Problem,
+    pub parameters: Parameters,
+    pub individual: Option<Individual>,
+    pub iterations: usize,
+    pub duration: f64
+}
+
 /// A genetic algorithm that searches for convergence to the given
 /// tolerance for the problem across the n-dimensional hypercube,
 /// using a population of individuals, up to a maximum iterations
 /// number of generations.
-pub fn search(problem: Problem, parameters: Parameters)
-              -> Option<(Individual, usize, f64)> {
+pub fn search(problem: Problem, parameters: Parameters) -> Results {
     // get thread local random number generator
     let mut rng = thread_rng();
 
@@ -53,7 +60,11 @@ pub fn search(problem: Problem, parameters: Parameters)
         // examine best individual for convergence
         if let Some(x) = population.iter().min() {
             if x.fitness < parameters.tolerance {
-                return Some((x.clone(), i, precise_time_s() - start_time));
+                return Results {
+                    problem: problem, parameters: parameters,
+                    individual: Some(x.clone()), iterations: i,
+                    duration: precise_time_s() - start_time
+                };
             }
             // print verbose information
             if parameters.verbosity > 0 && i % 10 == 0 {
@@ -70,7 +81,9 @@ pub fn search(problem: Problem, parameters: Parameters)
             }
         }
     }
-    None
+    Results { problem: problem, parameters: parameters, individual: None,
+              iterations: parameters.iterations,
+              duration: precise_time_s() - start_time }
 }
 
 /// Tournament selection from 4 random individuals

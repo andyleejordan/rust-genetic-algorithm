@@ -7,6 +7,7 @@ extern crate rand;
 extern crate time;
 
 use clap::App;
+use std::thread;
 
 mod algorithm;
 mod individual;
@@ -53,14 +54,20 @@ fn main() {
         verbosity: matches.occurrences_of("verbose") as usize
     };
 
-    for problem in problems {
-        if let Some((x, i, duration)) = algorithm::search(problem, parameters) {
-            println!("{} converged to {} after {} generations in {} seconds.",
-                     problem, x.fitness, i, duration);
-            println!{"{:?}", x.solution};
+    let workers = problems.iter().map(|&problem| {
+        thread::spawn(move || algorithm::search(problem, parameters))
+    });
 
-        } else {
-            println!("{} failed to converge.", problem);
+    for worker in workers {
+        if let Ok(results) = worker.join() {
+            if let Some(individual) = results.individual {
+                println!("{} converged to {} after {} generations in {} seconds.",
+                         results.problem, individual.fitness,
+                         results.iterations, results.duration);
+                println!("{:?}", individual.solution);
+            } else {
+                println!("{} failed to converge.", results.problem);
+            }
         }
     }
 }
