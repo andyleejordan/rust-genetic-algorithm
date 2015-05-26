@@ -39,9 +39,9 @@ impl Individual {
     pub fn combine<R: Rng>(x: &mut Individual, y: &mut Individual, rng: &mut R) {
         if rng.gen_weighted_bool(2) {
             let len = x.solution.len();
-            let (begin, n) = (rng.gen_range(0, len), rng.gen_range(0, len));
-            for i in begin..(begin + n) % len {
-                mem::swap(&mut x.solution[i], &mut y.solution[i]);
+            let (start, n) = (rng.gen_range(0, len), rng.gen_range(0, len));
+            for i in start..start + n {
+                mem::swap(&mut x.solution[i % len], &mut y.solution[i % len]);
             }
         }
         x.fitness = fitness(x.problem, &x.solution);
