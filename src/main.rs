@@ -6,7 +6,7 @@ extern crate clap;
 extern crate rand;
 extern crate time;
 
-use clap::App;
+use clap::{App, Arg};
 use std::thread;
 
 mod algorithm;
@@ -35,22 +35,29 @@ fn main() {
     let matches = App::new("rust-genetic-algorithm")
         .version(&crate_version!()[..])
         .author("Andrew Schwartzmeyer <andrew@schwartzmeyer.com")
-        .about("A genetic algorithm in Rust for Schwefel's function.")
-        .args_from_usage(
-            "[problem]... 'The problem to solve'
-             -t --tolerance [0.05] 'Sets the convergence tolerance'
-             -d --dimension [30] 'Sets the dimension of the hypercube'
-             -p --population [256] 'Sets the size of the population'
-             -i --iterations [5000] 'Sets maximum number of generations'
-             [verbose]... -v 'Print fitness (1) and solution (2) every 10th generation'")
+        .about("A genetic algorithm in Rust for various benchmark problems.")
+        .arg(Arg::with_name("tolerance").short("t").long("tol").takes_value(true)
+             .help("Sets the convergence tolerance (0.05)"))
+        .arg(Arg::with_name("dimension").short("d").long("dim").takes_value(true)
+             .help("Sets the dimension of the hypercube (30)"))
+        .arg(Arg::with_name("population").short("p").long("pop").takes_value(true)
+             .help("Sets the size of the population (256)"))
+        .arg(Arg::with_name("iterations").short("i").long("iter").takes_value(true)
+             .help("Sets maximum number of generations (5000)"))
+        .arg(Arg::with_name("verbose").short("v").long("verbose").multiple(true)
+             .help("Print fitness (1) and solution (2) every 10th generation"))
+        .arg(Arg::with_name("problem").multiple(true)
+             .help("The problems to solve: Schwefel or Ackley"))
         .get_matches();
+
     let problems = value_t!(matches.values_of("problem"), Problem)
         .unwrap_or(vec![Problem::Schwefel, Problem::Ackley]);
+
     let parameters = Parameters {
-        tolerance: value_t!(matches.value_of("t"), f64).unwrap_or(0.05_f64),
-        dimension: value_t!(matches.value_of("d"), usize).unwrap_or(30),
-        population: value_t!(matches.value_of("p"), usize).unwrap_or(256),
-        iterations: value_t!(matches.value_of("i"), usize).unwrap_or(5000),
+        tolerance: value_t!(matches.value_of("tolerance"), f64).unwrap_or(0.05_f64),
+        dimension: value_t!(matches.value_of("dimension"), usize).unwrap_or(30),
+        population: value_t!(matches.value_of("population"), usize).unwrap_or(256),
+        iterations: value_t!(matches.value_of("iterations"), usize).unwrap_or(5000),
         verbosity: matches.occurrences_of("verbose") as usize
     };
 
