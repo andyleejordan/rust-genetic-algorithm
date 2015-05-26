@@ -20,6 +20,15 @@ arg_enum!{
     }
 }
 
+#[derive(Debug, Copy, Clone)]
+pub struct Parameters {
+    tolerance: f64,
+    dimension: usize,
+    population: usize,
+    iterations: usize,
+    verbosity: usize
+}
+
 /// Setup and run algorithm to search for solution
 fn main() {
     let matches = App::new("rust-genetic-algorithm")
@@ -36,13 +45,22 @@ fn main() {
         .get_matches();
     let problems = value_t!(matches.values_of("problem"), Problem)
         .unwrap_or(vec![Problem::Schwefel, Problem::Ackley]);
-    let tolerance = value_t!(matches.value_of("t"), f64).unwrap_or(0.05_f64);
-    let dimension = value_t!(matches.value_of("d"), usize).unwrap_or(30);
-    let population = value_t!(matches.value_of("p"), usize).unwrap_or(256);
-    let iterations = value_t!(matches.value_of("i"), usize).unwrap_or(5000);
-    let verbosity = matches.occurrences_of("verbose") as usize;
+    let parameters = Parameters {
+        tolerance: value_t!(matches.value_of("t"), f64).unwrap_or(0.05_f64),
+        dimension: value_t!(matches.value_of("d"), usize).unwrap_or(30),
+        population: value_t!(matches.value_of("p"), usize).unwrap_or(256),
+        iterations: value_t!(matches.value_of("i"), usize).unwrap_or(5000),
+        verbosity: matches.occurrences_of("verbose") as usize
+    };
 
     for problem in problems {
-        algorithm::search(problem, tolerance, dimension, population, iterations, verbosity)
+        if let Some((x, i, duration)) = algorithm::search(problem, parameters) {
+            println!("{} converged to {} after {} generations in {} seconds.",
+                     problem, x.fitness, i, duration);
+            println!{"{:?}", x.solution};
+
+        } else {
+            println!("{} failed to converge.", problem);
+        }
     }
 }
