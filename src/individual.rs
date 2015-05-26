@@ -1,42 +1,36 @@
 /// A genetic algorithm in Rust
 /// Copyright (C) 2015  Andrew Schwartzmeyer
 
+use Problem;
+use problem::{fitness, domain};
 use std::cmp::{Eq, PartialEq, Ordering, PartialOrd};
 use std::mem;
 use rand::Rng;
-use rand::distributions::{IndependentSample, Range};
-
-/// Schwefel's Evolutionary Computation benchmark [problem][]
-/// Evaluated on the hypercube with x_i in [-500, 500] and dim(x) = 50
-/// Global minimum: f(x*) = 0, at x* = (420.9687, ...)
-/// [problem]: http://www.sfu.ca/~ssurjano/schwef.html
-fn schwefel(solution: &[f64]) -> f64 {
-    418.9829_f64 * solution.len() as f64
-        - solution.iter().fold(0_f64, |sum, x| {
-            sum + x * x.abs().sqrt().sin()
-        })
-}
+use rand::distributions::IndependentSample;
 
 /// An Orderable, Cloneable solution with a cached fitness
 pub struct Individual {
     pub solution: Vec<f64>,
     pub fitness: f64,
+    problem: Problem,
 }
 
 impl Individual {
-    /// Constructs a new Individual with n random values in the range
-    pub fn new<R: Rng>(n: usize, range: &Range<f64>, rng: &mut R) -> Self {
-        let solution: Vec<_> = (0..n).map(|_| range.ind_sample(rng)).collect();
-        let fitness = schwefel(&solution);
-        Individual { solution: solution, fitness: fitness }
+    /// Constructs a new Individual to solve Problem with n random values
+    pub fn new<R: Rng>(problem: Problem, dimension: usize, rng: &mut R) -> Self {
+        let solution: Vec<_> = (0..dimension).map(|_| {
+            domain(problem).ind_sample(rng)
+        }).collect();
+        let fitness = fitness(problem, &solution);
+        Individual { solution: solution, fitness: fitness, problem: problem }
     }
 
     /// Mutates 0 or 1 random genes to a new value in the range
     /// Fitness is NOT evaluated as it is ALWAYS done in `combine()`
-    pub fn mutate<R: Rng>(&mut self, range: &Range<f64>, rng: &mut R) {
+    pub fn mutate<R: Rng>(&mut self, rng: &mut R) {
         for _ in 0..rng.gen_range(0, 2) {
             let i = rng.gen_range(0, self.solution.len());
-            self.solution[i] = range.ind_sample(rng);
+            self.solution[i] = domain(self.problem).ind_sample(rng);
         }
     }
 
@@ -50,14 +44,14 @@ impl Individual {
                 mem::swap(&mut x.solution[i], &mut y.solution[i]);
             }
         }
-        x.fitness = schwefel(&x.solution);
-        y.fitness = schwefel(&y.solution);
+        x.fitness = fitness(x.problem, &x.solution);
+        y.fitness = fitness(y.problem, &y.solution);
     }
 }
 
 impl Clone for Individual {
     fn clone(&self) -> Self {
-        Individual { solution: self.solution.clone(), fitness: self.fitness }
+        Individual { solution: self.solution.clone(), .. *self }
     }
 }
 

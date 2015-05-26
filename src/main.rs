@@ -8,12 +8,12 @@ extern crate time;
 
 use clap::App;
 use rand::Rng;
-use rand::distributions;
 use time::precise_time_s;
 use std::thread;
 use individual::Individual;
 
 mod individual;
+mod problem;
 
 arg_enum!{
     #[derive(Copy, Clone)]
@@ -52,11 +52,10 @@ fn main() {
     let verbose = matches.is_present("verbose");
 
     let mut rng = rand::thread_rng();
-    let range = distributions::Range::new(-500_f64, 500_f64);
 
     // initialize population individuals
     let mut population: Vec<_> = (0..population_size).map(|_| {
-        Individual::new(dimension, &range, &mut rng)
+        Individual::new(problem, dimension, &mut rng)
     }).collect();
 
     let start_time = precise_time_s();
@@ -67,8 +66,8 @@ fn main() {
         for _ in 0..population.len()/2 {
             let (mut x, mut y) = (select(&population, &mut rng),
                                   select(&population, &mut rng));
-            x.mutate(&range, &mut rng);
-            y.mutate(&range, &mut rng);
+            x.mutate(&mut rng);
+            y.mutate(&mut rng);
             Individual::combine(&mut x, &mut y, &mut rng);
             offspring.push(x);
             offspring.push(y);
