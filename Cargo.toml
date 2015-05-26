@@ -8,6 +8,9 @@ repository = "https://github.com/andschwa/rust-genetic-algorithm"
 homepage = "https://github.com/andschwa/rust-genetic-algorithm"
 description = "A genetic algorithm in Rust for Schwefel's function."
 
+[profile.dev]
+opt-level = 2
+
 [dependencies]
 rand = "0.3"
 time = "0.1"
