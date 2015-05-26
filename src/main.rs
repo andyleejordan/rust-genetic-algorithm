@@ -34,7 +34,7 @@ pub struct Parameters {
 fn main() {
     let matches = App::new("rust-genetic-algorithm")
         .version(&crate_version!()[..])
-        .author("Andrew Schwartzmeyer <andrew@schwartzmeyer.com")
+        .author("Andrew Schwartzmeyer <andrew@schwartzmeyer.com>")
         .about("A genetic algorithm in Rust for various benchmark problems.")
         .arg(Arg::with_name("tolerance").short("t").long("tol").takes_value(true)
              .help("Sets the convergence tolerance (0.05)"))
