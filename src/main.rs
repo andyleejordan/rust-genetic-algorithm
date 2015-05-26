@@ -13,8 +13,7 @@ use individual::Individual;
 mod individual;
 
 /// Tournament selection from 4 random individuals
-fn select<R: Rng>(population: &Vec<Individual>, rng: &mut R)
-                  -> Individual {
+fn select<R: Rng>(population: &[Individual], rng: &mut R) -> Individual {
     if let Some(selected) = (0..4).map(|_| rng.choose(population)).min() {
         selected.unwrap().clone()
     } else {
