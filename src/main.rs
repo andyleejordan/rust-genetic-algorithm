@@ -16,7 +16,7 @@ mod individual;
 mod problem;
 
 arg_enum!{
-    #[derive(Copy, Clone)]
+    #[derive(Debug, PartialEq, Eq, Copy, Clone)]
     pub enum Problem {
         Schwefel
     }

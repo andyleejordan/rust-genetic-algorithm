@@ -38,6 +38,7 @@ impl Individual {
     /// Recombines two Individuals with a 1 in 2 chance via two-point crossover
     /// Fitness is ALWAYS evaluated because it is NOT done in mutate()
     pub fn combine<R: Rng>(x: &mut Individual, y: &mut Individual, rng: &mut R) {
+        assert_eq!(x.problem, y.problem);
         if rng.gen_weighted_bool(2) {
             let len = x.solution.len();
             let (start, n) = (rng.gen_range(0, len), rng.gen_range(0, len));
