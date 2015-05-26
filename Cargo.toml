@@ -1,6 +1,6 @@
 [package]
 name = "rust-genetic-algorithm"
-version = "1.1.0"
+version = "1.2.0"
 authors = ["Andrew Schwartzmeyer <andrew@schwartzmeyer.com>"]
 license = "AGPL"
 readme = "README.md"
