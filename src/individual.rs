@@ -2,10 +2,10 @@
 /// Copyright (C) 2015  Andrew Schwartzmeyer
 
 use Problem;
-use std::cmp::{Eq, PartialEq, Ordering, PartialOrd};
-use std::mem;
 use rand::Rng;
 use rand::distributions::IndependentSample;
+use std::cmp::{Eq, PartialEq, Ordering, PartialOrd};
+use std::mem;
 
 /// An Orderable, Cloneable solution with a cached fitness
 #[derive(Clone)]

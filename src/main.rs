@@ -7,10 +7,10 @@ extern crate rand;
 extern crate time;
 
 use clap::App;
-use rand::Rng;
-use time::precise_time_s;
-use std::thread;
 use individual::Individual;
+use rand::Rng;
+use std::thread;
+use time::precise_time_s;
 
 mod individual;
 mod problem;
