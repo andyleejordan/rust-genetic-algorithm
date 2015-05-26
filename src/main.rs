@@ -94,8 +94,11 @@ fn main() {
             }
             if x.fitness < 0.05_f64 {
                 let duration = precise_time_s() - start_time;
-                println!("{}th solution converged at {} in {} seconds: {:?}",
-                         i, x.fitness, duration, x.solution);
+                println!("{}th solution converged at {} in {} seconds",
+                         i, x.fitness, duration);
+                if verbose {
+                    println!{"{:?}", x.solution};
+                }
                 return;
             }
         } else { unimplemented!() }
