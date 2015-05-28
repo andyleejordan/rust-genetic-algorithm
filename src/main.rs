@@ -71,14 +71,10 @@ fn main() {
 
     for worker in workers {
         if let Ok(results) = worker.join() {
-            if let Some(individual) = results.individual {
-                println!("{} converged to {} after {} generations in {} seconds.",
-                         results.problem, individual.fitness,
-                         results.iterations, results.duration);
-                println!("{:?}", individual.solution);
-            } else {
-                println!("{} failed to converge.", results.problem);
-            }
+            println!("{} converged to {} after {} generations in {} seconds.",
+                     results.problem, results.individual.fitness,
+                     results.iterations, results.duration);
+            println!("{:?}", results.individual.solution);
         }
     }
 }

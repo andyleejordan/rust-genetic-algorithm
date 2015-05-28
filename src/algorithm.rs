@@ -11,7 +11,7 @@ use time::precise_time_s;
 pub struct Results {
     pub problem: Problem,
     pub parameters: Parameters,
-    pub individual: Option<Individual>,
+    pub individual: Individual,
     pub iterations: usize,
     pub duration: f64
 }
@@ -62,7 +62,7 @@ pub fn search(problem: Problem, parameters: Parameters) -> Results {
             if x.fitness < parameters.tolerance {
                 return Results {
                     problem: problem, parameters: parameters,
-                    individual: Some(x.clone()), iterations: i,
+                    individual: x.clone(), iterations: i,
                     duration: precise_time_s() - start_time
                 };
             }
@@ -81,9 +81,13 @@ pub fn search(problem: Problem, parameters: Parameters) -> Results {
             }
         }
     }
-    Results { problem: problem, parameters: parameters, individual: None,
-              iterations: parameters.iterations,
-              duration: precise_time_s() - start_time }
+    if let Some(x) = population.iter().min() {
+        Results { problem: problem, parameters: parameters,
+                  individual: x.clone(), iterations: parameters.iterations,
+                  duration: precise_time_s() - start_time }
+    } else {
+        unimplemented!();
+    }
 }
 
 /// Tournament selection from 4 random individuals
