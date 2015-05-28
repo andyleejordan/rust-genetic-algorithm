@@ -8,11 +8,11 @@ A genetic algorithm in [Rust][] for the following [benchmark problems][]:
 - [ ] Fletcher
 - [ ] Langerman
 - [ ] Powell
-- [ ] Rastrigin
 - [ ] Rosenbrock
 - [ ] Sphere
 - [x] Ackley
 - [x] Griewangk
+- [x] Rastrigin
 - [x] Schwefel
 
 Usage:
