@@ -7,21 +7,24 @@ use std::f64::consts;
 
 impl Problem {
     /// Fitness function for the evolutionary computation benchmark
-    /// problems evaluated on the hybercube.
+    /// problems evaluated on the hybercube of dimension p, where
+    /// f(x*) = 0.
     ///
     /// # [Problems](https://www.cs.cmu.edu/afs/cs/project/jair/pub/volume24/ortizboyer05a-html/node6.html)
     ///
-    /// * Schwefel: x* = (420.9687, ...), f(x*) = 0
+    /// * Ackley: 20+e-20*exp(-0.2*sqrt((1/p)*sum(x_i^2)))-exp((1/p)*sum(cos(2*pi*x_i))), x*=(0, ...)
+    /// * Griewangk: 1+sum(x_i^2/4000)-prod(cos(x_i/sqrt(i))), x*=(0, ...)
+    /// * Schwefel: 418.9829*p+sum(x_i*sin(sqrt(abs(x_i)))), x*=(420.9687, ...)
     pub fn fitness(&self, x: &[f64]) -> f64 {
+        let p = x.len() as f64;
         match *self {
             Problem::Ackley => {
-                let p = x.len() as f64;
                 20_f64 + consts::E - 20_f64 *
-                    (-0.2_f64 * (p.recip() * (x.iter().fold(0_f64, |sum, i| {
-                        sum + i.powi(2)
+                    (-0.2_f64 * (p.recip() * (x.iter().fold(0_f64, |sum, x| {
+                        sum + x.powi(2)
                     })).sqrt())).exp() -
-                    (p.recip() * x.iter().fold(0_f64, |sum, i| {
-                        sum + (2_f64 * consts::PI * i).cos()
+                    (p.recip() * x.iter().fold(0_f64, |sum, x| {
+                        sum + (2_f64 * consts::PI * x).cos()
                     })).exp()
             }
             Problem::Griewangk => {
@@ -32,7 +35,7 @@ impl Problem {
                 })
             }
             Problem::Schwefel => {
-                418.9829_f64 * x.len() as f64 + x.iter().fold(0_f64, |sum, i| {
+                418.9829_f64 * p + x.iter().fold(0_f64, |sum, i| {
                     sum + i * i.abs().sqrt().sin()
                 })
             }
