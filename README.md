@@ -5,9 +5,6 @@ Genetic Algorithm
 
 A genetic algorithm in [Rust][] for the following [benchmark problems][]:
 
-- [ ] Fletcher
-- [ ] Langerman
-- [ ] Powell
 - [x] Ackley
 - [x] Griewangk
 - [x] Rastrigin
@@ -20,7 +17,7 @@ Usage:
 1. Install [Rust][]
 2. Build with `cargo build --release`
 3. Search with `./target/release/rust-genetic-algorithm`
-4. See further useage with `rust-genetic-algorithm --help`
+4. See further usage with `rust-genetic-algorithm --help`
 
 Based on my prior implementation in [C++][].
 
