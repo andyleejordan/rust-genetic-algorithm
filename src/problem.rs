@@ -24,6 +24,13 @@ impl Problem {
                         sum + (2_f64 * consts::PI * i).cos()
                     })).exp()
             }
+            Problem::Griewangk => {
+                1_f64 + x.iter().fold(0_f64, |sum, x| {
+                    sum + x.powi(2)/4000_f64
+                }) - x.iter().enumerate().fold(1_f64, |prod, (i, x)| {
+                    prod * (x/((i + 1) as f64).sqrt()).cos()
+                })
+            }
             Problem::Schwefel => {
                 418.9829_f64 * x.len() as f64 + x.iter().fold(0_f64, |sum, i| {
                     sum + i * i.abs().sqrt().sin()
@@ -37,6 +44,7 @@ impl Problem {
         match *self {
             Problem::Ackley => Range::new(-30_f64, 30_f64),
             Problem::Schwefel => Range::new(-512.03_f64, 511.97_f64),
+            Problem::Griewangk => Range::new(-600_f64, 600_f64),
         }
     }
 }

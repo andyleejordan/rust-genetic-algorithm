@@ -17,6 +17,7 @@ arg_enum!{
     #[derive(Debug, PartialEq, Eq, Copy, Clone)]
     pub enum Problem {
         Ackley,
+        Griewangk,
         Schwefel
     }
 }
@@ -51,7 +52,7 @@ fn main() {
         .get_matches();
 
     let problems = value_t!(matches.values_of("problem"), Problem)
-        .unwrap_or(vec![Problem::Schwefel, Problem::Ackley]);
+        .unwrap_or(vec![Problem::Schwefel, Problem::Ackley, Problem::Griewangk]);
 
     let parameters = Parameters {
         tolerance: value_t!(matches.value_of("tolerance"), f64).unwrap_or(0.05_f64),

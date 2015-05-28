@@ -5,14 +5,14 @@ Genetic Algorithm
 
 A genetic algorithm in [Rust][] for the following [benchmark problems][]:
 
-- [ ] Rosenbrock
-- [ ] Sphere
 - [ ] Fletcher
-- [ ] Griewangk
 - [ ] Langerman
 - [ ] Powell
 - [ ] Rastrigin
+- [ ] Rosenbrock
+- [ ] Sphere
 - [x] Ackley
+- [x] Griewangk
 - [x] Schwefel
 
 Usage:
