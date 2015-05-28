@@ -20,7 +20,8 @@ arg_enum!{
         Griewangk,
         Rastrigin,
         Rosenbrock,
-        Schwefel
+        Schwefel,
+        Sphere
     }
 }
 
@@ -55,7 +56,7 @@ fn main() {
 
     let problems = value_t!(matches.values_of("problem"), Problem)
         .unwrap_or(vec![Problem::Ackley, Problem::Griewangk, Problem::Rastrigin,
-                        Problem::Rosenbrock, Problem::Schwefel]);
+                        Problem::Rosenbrock, Problem::Schwefel, Problem::Sphere]);
 
     let parameters = Parameters {
         tolerance: value_t!(matches.value_of("tolerance"), f64).unwrap_or(0.05_f64),
