@@ -54,14 +54,20 @@ impl Problem {
     }
 
     /// Domain for the given problem.
-    pub fn domain(&self) -> Range<f64> {
+    pub fn domain(&self) -> (f64, f64) {
         match *self {
-            Problem::Ackley => Range::new(-30_f64, 30_f64),
-            Problem::Griewangk => Range::new(-600_f64, 600_f64),
-            Problem::Rastrigin => Range::new(-5.12_f64, 5.12_f64),
-            Problem::Rosenbrock => Range::new(-2.048_f64, 2.048_f64),
-            Problem::Schwefel => Range::new(-512.03_f64, 511.97_f64),
-            Problem::Sphere => Range::new(-5.12_f64, 5.12_f64),
+            Problem::Ackley     => (-30_f64, 30_f64),
+            Problem::Griewangk  => (-600_f64, 600_f64),
+            Problem::Rastrigin  => (-5.12_f64, 5.12_f64),
+            Problem::Rosenbrock => (-2.048_f64, 2.048_f64),
+            Problem::Schwefel   => (-512.03_f64, 511.97_f64),
+            Problem::Sphere     => (-5.12_f64, 5.12_f64),
         }
+    }
+
+    /// Random distribution for problem's domain
+    pub fn domain_dist(&self) -> Range<f64> {
+        let (a, b) = self.domain();
+        Range::new(a, b)
     }
 }

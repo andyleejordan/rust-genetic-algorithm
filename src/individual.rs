@@ -19,7 +19,7 @@ impl Individual {
     /// Constructs a new Individual to solve Problem with n random values
     pub fn new<R: Rng>(problem: Problem, dimension: usize, rng: &mut R) -> Self {
         let x: Vec<_> = (0..dimension).map(|_| {
-            problem.domain().ind_sample(rng)
+            problem.domain_dist().ind_sample(rng)
         }).collect();
         let fitness = problem.fitness(&x);
         Individual { solution: x, fitness: fitness, problem: problem }
@@ -30,7 +30,7 @@ impl Individual {
     pub fn mutate<R: Rng>(&mut self, rng: &mut R) {
         for _ in 0..rng.gen_range(0, 2) {
             let i = rng.gen_range(0, self.solution.len());
-            self.solution[i] = self.problem.domain().ind_sample(rng);
+            self.solution[i] = self.problem.domain_dist().ind_sample(rng);
         }
     }
 
