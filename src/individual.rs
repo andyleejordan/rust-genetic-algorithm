@@ -25,10 +25,12 @@ impl Individual {
         Individual { solution: x, fitness: fitness, problem: problem }
     }
 
-    /// Mutates 0 or 1 random genes to a new value in the range
-    /// Fitness is NOT evaluated as it is ALWAYS done in `combine()`
-    pub fn mutate<R: Rng>(&mut self, rng: &mut R) {
-        for _ in 0..rng.gen_range(0, 2) {
+    /// Mutate with chance n a single gene to a new value in the
+    /// problem's domain (a "jump" mutation).
+    ///
+    /// Fitness is NOT evaluated as it is ALWAYS done in `crossover()`
+    pub fn mutate<R: Rng>(&mut self, chance: f64, rng: &mut R) {
+        if rng.gen_range(0_f64, 1_f64) < chance {
             let i = rng.gen_range(0, self.solution.len());
             self.solution[i] = self.problem.domain_dist().ind_sample(rng);
         }
