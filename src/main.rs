@@ -32,6 +32,7 @@ pub struct Parameters {
     population: usize,
     iterations: usize,
     selection: usize,
+    elitism: usize,
     verbosity: usize
 }
 
@@ -51,6 +52,8 @@ fn main() {
              .help("Sets maximum number of generations (10,000)"))
         .arg(Arg::with_name("selection").short("s").long("select").takes_value(true)
              .help("Sets the size of the tournament selection (4)"))
+        .arg(Arg::with_name("elitism").short("e").long("elite").takes_value(true)
+             .help("Sets the number of elite replacements (2)"))
         .arg(Arg::with_name("verbose").short("v").long("verbose").multiple(true)
              .help("Print fitness (1) and solution (2) every 10th generation"))
         .arg(Arg::with_name("problem").multiple(true)
@@ -67,6 +70,7 @@ fn main() {
         population: value_t!(matches.value_of("population"), usize).unwrap_or(512),
         iterations: value_t!(matches.value_of("iterations"), usize).unwrap_or(10000),
         selection: value_t!(matches.value_of("selection"), usize).unwrap_or(4),
+        elitism: value_t!(matches.value_of("elitism"), usize).unwrap_or(2),
         verbosity: matches.occurrences_of("verbose") as usize
     };
 

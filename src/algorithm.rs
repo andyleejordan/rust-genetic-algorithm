@@ -48,7 +48,7 @@ pub fn search(problem: Problem, params: Parameters) -> Results {
         assert!(offspring.len() == population.len());
 
         // replace 2 random individuals with elite of prior generation
-        for _ in 0..2 {
+        for _ in 0..params.elitism {
             if let Some(x) = population.iter().min() {
                 offspring[rng.gen_range(0, population.len())] = x.clone();
             }
