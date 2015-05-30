@@ -41,7 +41,7 @@ fn main() {
         .author("Andrew Schwartzmeyer <andrew@schwartzmeyer.com>")
         .about("A genetic algorithm in Rust for various benchmark problems.")
         .arg(Arg::with_name("tolerance").short("t").long("tol").takes_value(true)
-             .help("Sets the convergence tolerance (0.05)"))
+             .help("Sets the convergence tolerance (0.01)"))
         .arg(Arg::with_name("dimension").short("d").long("dim").takes_value(true)
              .help("Sets the dimension of the hypercube (30)"))
         .arg(Arg::with_name("population").short("p").long("pop").takes_value(true)
@@ -59,7 +59,7 @@ fn main() {
                         Problem::Rosenbrock, Problem::Schwefel, Problem::Sphere]);
 
     let parameters = Parameters {
-        tolerance: value_t!(matches.value_of("tolerance"), f64).unwrap_or(0.05_f64),
+        tolerance: value_t!(matches.value_of("tolerance"), f64).unwrap_or(0.01_f64),
         dimension: value_t!(matches.value_of("dimension"), usize).unwrap_or(30),
         population: value_t!(matches.value_of("population"), usize).unwrap_or(256),
         iterations: value_t!(matches.value_of("iterations"), usize).unwrap_or(5000),
