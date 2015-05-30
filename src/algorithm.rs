@@ -37,11 +37,11 @@ pub fn search(problem: Problem, params: Parameters) -> Results {
         // select, mutate, and crossover individuals for next generation
         let mut offspring: Vec<Individual> = Vec::with_capacity(population.len());
         for _ in 0..population.len()/2 {
-            Individual::combine(&mut x, &mut y, &mut rng);
             let (mut x, mut y) = (select(&population, params.selection, &mut rng),
                                   select(&population, params.selection, &mut rng));
             x.mutate(params.mutation, &mut rng);
             y.mutate(params.mutation, &mut rng);
+            Individual::crossover(&mut x, &mut y, params.crossover, &mut rng);
             offspring.push(x);
             offspring.push(y);
         }

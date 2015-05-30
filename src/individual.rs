@@ -36,11 +36,14 @@ impl Individual {
         }
     }
 
-    /// Recombines two Individuals with a 1 in 2 chance via two-point crossover
+    /// Performs two-point crossover with chance n to swap a random
+    /// set of [0, dimension] genes between a pair of individuals.
+    ///
     /// Fitness is ALWAYS evaluated because it is NOT done in mutate()
-    pub fn combine<R: Rng>(x: &mut Individual, y: &mut Individual, rng: &mut R) {
+    pub fn crossover<R: Rng>(x: &mut Individual, y: &mut Individual,
+                             chance: f64, rng: &mut R) {
         assert_eq!(x.problem, y.problem);
-        if rng.gen_weighted_bool(2) {
+        if rng.gen_range(0_f64, 1_f64) < chance {
             let len = x.solution.len();
             let (start, n) = (rng.gen_range(0, len), rng.gen_range(0, len));
             for i in start..start + n {
