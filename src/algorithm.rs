@@ -37,11 +37,11 @@ pub fn search(problem: Problem, params: Parameters) -> Results {
         // select, mutate, and crossover individuals for next generation
         let mut offspring: Vec<Individual> = Vec::with_capacity(population.len());
         for _ in 0..population.len()/2 {
-            let (mut x, mut y) = (select(&population, &mut rng),
-                                  select(&population, &mut rng));
             x.mutate(&mut rng);
             y.mutate(&mut rng);
             Individual::combine(&mut x, &mut y, &mut rng);
+            let (mut x, mut y) = (select(&population, params.selection, &mut rng),
+                                  select(&population, params.selection, &mut rng));
             offspring.push(x);
             offspring.push(y);
         }
@@ -90,9 +90,9 @@ pub fn search(problem: Problem, params: Parameters) -> Results {
     }
 }
 
-/// Tournament selection from 4 random individuals
-fn select<R: Rng>(population: &[Individual], rng: &mut R) -> Individual {
-    if let Some(selected) = (0..4).map(|_| rng.choose(population)).min() {
+/// Tournament selection from n random individuals
+fn select<R: Rng>(population: &[Individual], n: usize, rng: &mut R) -> Individual {
+    if let Some(selected) = (0..n).map(|_| rng.choose(population)).min() {
         selected.unwrap().clone()
     } else {
         unimplemented!();

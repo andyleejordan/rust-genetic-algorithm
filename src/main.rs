@@ -31,6 +31,7 @@ pub struct Parameters {
     dimension: usize,
     population: usize,
     iterations: usize,
+    selection: usize,
     verbosity: usize
 }
 
@@ -48,6 +49,8 @@ fn main() {
              .help("Sets the size of the population (512)"))
         .arg(Arg::with_name("iterations").short("i").long("iter").takes_value(true)
              .help("Sets maximum number of generations (10,000)"))
+        .arg(Arg::with_name("selection").short("s").long("select").takes_value(true)
+             .help("Sets the size of the tournament selection (4)"))
         .arg(Arg::with_name("verbose").short("v").long("verbose").multiple(true)
              .help("Print fitness (1) and solution (2) every 10th generation"))
         .arg(Arg::with_name("problem").multiple(true)
@@ -63,6 +66,7 @@ fn main() {
         dimension: value_t!(matches.value_of("dimension"), usize).unwrap_or(30),
         population: value_t!(matches.value_of("population"), usize).unwrap_or(512),
         iterations: value_t!(matches.value_of("iterations"), usize).unwrap_or(10000),
+        selection: value_t!(matches.value_of("selection"), usize).unwrap_or(4),
         verbosity: matches.occurrences_of("verbose") as usize
     };
 
