@@ -63,7 +63,13 @@ fn main() {
         .arg(Arg::with_name("verbose").short("v").long("verbose").multiple(true)
              .help("Print fitness (1) and solution (2) every 10th generation"))
         .arg(Arg::with_name("problem").multiple(true)
-             .help("The problems to solve: Schwefel or Ackley"))
+             .help("The problems to solve:
+                    * Ackley
+                    * Griewangk
+                    * Rastrigin
+                    * Rosenbrock
+                    * Schwefel
+                    * Sphere"))
         .get_matches();
 
     let problems = value_t!(matches.values_of("problem"), Problem)

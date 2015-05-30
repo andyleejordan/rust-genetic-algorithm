@@ -5,12 +5,12 @@ Genetic Algorithm
 
 A genetic algorithm in [Rust][] for the following [benchmark problems][]:
 
-- [x] Ackley
-- [x] Griewangk
-- [x] Rastrigin
-- [x] Rosenbrock
-- [x] Schwefel
-- [x] Sphere
+* Ackley
+* Griewangk
+* Rastrigin
+* Rosenbrock
+* Schwefel
+* Sphere
 
 Usage:
 
