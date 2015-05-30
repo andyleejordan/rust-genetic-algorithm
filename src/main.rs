@@ -47,7 +47,7 @@ fn main() {
         .arg(Arg::with_name("population").short("p").long("pop").takes_value(true)
              .help("Sets the size of the population (512)"))
         .arg(Arg::with_name("iterations").short("i").long("iter").takes_value(true)
-             .help("Sets maximum number of generations (5000)"))
+             .help("Sets maximum number of generations (10,000)"))
         .arg(Arg::with_name("verbose").short("v").long("verbose").multiple(true)
              .help("Print fitness (1) and solution (2) every 10th generation"))
         .arg(Arg::with_name("problem").multiple(true)
@@ -61,8 +61,8 @@ fn main() {
     let parameters = Parameters {
         tolerance: value_t!(matches.value_of("tolerance"), f64).unwrap_or(0.01_f64),
         dimension: value_t!(matches.value_of("dimension"), usize).unwrap_or(30),
-        iterations: value_t!(matches.value_of("iterations"), usize).unwrap_or(5000),
         population: value_t!(matches.value_of("population"), usize).unwrap_or(512),
+        iterations: value_t!(matches.value_of("iterations"), usize).unwrap_or(10000),
         verbosity: matches.occurrences_of("verbose") as usize
     };
 
